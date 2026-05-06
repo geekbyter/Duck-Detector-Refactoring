@@ -127,6 +127,10 @@ namespace duckdetector::nativeroot {
         }
 
         // KernelSU devpts hooks can stamp the newly allocated PTY as u:object_r:ksu_file:s0.
+        // Mostly, this path is useless
+        // Unless KernelSU Forks remove ksu_is_allow_uid check
+        // But them even reintroduce devpts hook, no one can guarantee they won't do that.
+        // Just in case to try detect
         const int master_fd = posix_openpt(O_RDWR | O_NOCTTY);
         if (master_fd == -1) {
             note_error(result, "/dev/pts/new", "posix_openpt failed", errno);
